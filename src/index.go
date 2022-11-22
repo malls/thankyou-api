@@ -24,11 +24,26 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.POST("/shirt", controllers.ShirtPostHandler)
-	e.GET("/printful-categories", func(c echo.Context) error {
-		data := printful.GetVariantIds()
+	e.GET("/printful/categories", func(c echo.Context) error {
+		data := printful.GetCategories()
 
 		return c.JSONPretty(http.StatusOK, data, "  ")
 	})
+
+	e.GET("/printful/product/:id", func(c echo.Context) error {
+		id := c.Param("id")
+		data := printful.GetProduct(id)
+
+		return c.JSONPretty(http.StatusOK, data, "  ")
+	})
+
+	e.GET("/printful/products/:id", func(c echo.Context) error {
+		id := c.Param("id")
+		data := printful.GetProducts(id)
+
+		return c.JSONPretty(http.StatusOK, data, "  ")
+	})
+
 	e.GET("/status", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Running Okay")
 	})
